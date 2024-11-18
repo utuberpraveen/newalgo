@@ -1,0 +1,137 @@
+trading_bot_platform/
+├── app/
+│   ├── __init__.py             # Initializes the Flask app and extensions
+│   ├── config.py               # Configuration settings (database URIs, secrets)
+│   ├── auth/                   # User authentication and registration
+│   │   ├── __init__.py
+│   │   ├── routes.py           # Routes for login, registration, logout
+│   │   └── forms.py            # WTForms for registration and login forms
+│   ├── bot/                    # Bot control and trading logic
+│   │   ├── __init__.py
+│   │   ├── bot_manager.py      # Main bot logic (start, stop, monitor prices)
+│   │   └── api_client.py       # Real-time price retrieval (e.g., from Alpha Vantage)
+│   ├── models/                 # Database models
+│   │   ├── __init__.py
+│   │   ├── user.py             # User model
+│   │   ├── trade.py            # Trade/order logging model
+│   │   └── stock_data.py       # Parsed stock data from Excel
+│   ├── notifications/          # Notifications handling
+│   │   ├── __init__.py
+│   │   └── notifier.py         # Email, WhatsApp, or Telegram notifications
+│   ├── templates/              # HTML templates for the frontend
+│   │   ├── base.html           # Base template
+│   │   ├── login.html          # Login page
+│   │   ├── register.html       # Registration page
+│   │   └── dashboard.html      # Dashboard with bot controls
+│   ├── static/                 # Static files (CSS, JavaScript)
+│   │   ├── css/
+│   │   └── js/
+│   ├── utils/                  # Utility functions
+│   │   ├── __init__.py
+│   │   └── excel_parser.py     # Function for parsing Excel file
+│   ├── views/                  # Views for routing different parts of the app
+│   │   ├── __init__.py
+│   │   └── dashboard.py        # Main dashboard view
+│   └── extensions.py           # Initialize extensions (SQLAlchemy, LoginManager, etc.)
+├── migrations/                 # Database migration files
+├── tests/                      # Unit and integration tests
+│   ├── __init__.py
+│   ├── test_auth.py            # Test for authentication
+│   ├── test_bot.py             # Test for bot logic
+│   └── test_notifications.py   # Test for notifications
+├── .env                        # Environment variables (database URI, API keys)
+├── requirements.txt            # Python dependencies
+├── run.py                      # Run the Flask application
+└── README.md                   # Documentation
+
+
+
+
+
+I need a Python-based Flask application that serves as a trading bot platform with the following functionalities:
+
+User Registration and Authentication:
+Set up user registration and login functionality using Flask with secure password hashing (e.g., using werkzeug.security).
+Use SQLite as the database (with a structure for storing user details) initially, with potential for migration to MySQL.
+Excel File Upload and Parsing:
+Each user should be able to upload an Excel file containing their trading instructions.
+Use pandas to parse the Excel file, which will include columns for Stock Symbol, Target Buy Price, Target Sell Price, Quantity, and Stop-Loss Price.
+Store the parsed data in a user-specific database table.
+Bot Control:
+Create a Start button on the user dashboard to initiate the trading bot.
+Once started, the bot should fetch real-time stock prices from an API (e.g., Alpha Vantage, Yahoo Finance, or an Indian stock market API).
+Include a Stop button to allow users to pause or stop the bot at any time.
+Real-Time Price Monitoring and Trade Execution:
+For each stock in the uploaded Excel file, monitor the live price data to check:
+If the current price matches or falls below the Target Buy Price to trigger a buy order.
+If the current price reaches or exceeds the Target Sell Price to trigger a sell order.
+If the current price reaches the Stop-Loss Price for an immediate sell.
+Use mock buy/sell functions for testing purposes, with real trading APIs to be integrated later.
+Order Logging and Notifications:
+Log all buy/sell transactions with details like timestamp, executed price, quantity, and order status in a user-specific log table.
+Send email, WhatsApp, or Telegram notifications to the user upon trade executions or critical events, like reaching the stop-loss price.
+User Dashboard:
+Provide a real-time dashboard showing the bot’s status, recent trades, current stock prices, and an optional live P&L calculation.
+Error Handling and Security:
+Implement error handling for network/API issues, invalid data inputs, and unauthorized access.
+Ensure each user’s data and bot session is isolated from others.
+Securely store and manage all credentials, and encrypt sensitive information.
+
+
+
+
+Project Overview
+This application is a Flask-based stock trading platform where multiple users can:
+
+Authenticate securely, ideally using Google OAuth.
+Manage a trading bot that performs trading operations (buy/sell) based on pre-defined criteria.
+Upload and store stock data for the bot to utilize.
+View a dashboard displaying the bot's activity, trading status, and account details.
+Receive notifications regarding trading activity through potential integrations (WhatsApp, Telegram).
+Key Requirements and Workflow
+1. User Authentication
+Goal: Allow multiple users to log in via Google OAuth.
+Workflow:
+When a user navigates to http://127.0.0.1:5000/, they should be automatically redirected to the login page if not authenticated.
+On successful login, their credentials should be verified through Google OAuth, and a user entry should be stored in the database if they are logging in for the first time.
+After logging in, they are redirected to the dashboard, where they can manage their bot.
+2. User Management and Storage
+Goal: Maintain a record of users who have logged into the system.
+Database Structure:
+A User table to store each user’s email, authentication status, and unique identifier.
+The User model should be accessible for managing user sessions and tracking activity.
+3. Bot Management and Configuration
+Goal: Allow users to upload a stock list and configure bot settings (e.g., buy/sell criteria, stop-loss).
+Workflow:
+Users can upload a spreadsheet containing stock symbols, target prices, quantities, and stop-loss information.
+This data is parsed and stored in a StockData table linked to each user.
+Users can start and stop their bots, which will run during specific market hours.
+4. Stock Data Management
+Goal: Allow users to provide stock data for the bot to use.
+Workflow:
+A utility function (excel_parser.py) reads the uploaded stock list and stores the information in the database.
+Stock data includes details like stock symbols, buy/sell prices, and quantities.
+5. Dashboard Display and Real-Time Updates
+Goal: Display an interactive dashboard that shows:
+Bot status (online/offline).
+Last trade and market price updates.
+Logs of all buy/sell operations.
+Workflow:
+Upon successful login, users are redirected to the dashboard.
+The dashboard page (dashboard.html) retrieves data from the backend, such as the bot’s current status, recent trades, and any live price updates.
+6. Notifications and Alerts
+Goal: Send real-time notifications about trading actions.
+Future Scope: Consider integrating WhatsApp or Telegram for push notifications about trade actions or account events.
+Key File Structure (as you provided earlier)
+Each file and module in the structure aligns with these requirements, ensuring separation of concerns:
+
+app/: Main application directory, with sub-modules for each major functionality (authentication, bot management, notifications).
+app/auth/routes.py: Handles user authentication routes (login, logout).
+app/views/dashboard.py: Contains the dashboard route, rendering a page with user and bot information.
+app/utils/excel_parser.py: Parses uploaded Excel files for stock data.
+Workflow Summary
+Access the Application: Visiting http://127.0.0.1:5000/ redirects to the login page if unauthenticated.
+Authentication: Users log in via Google, creating or retrieving their profile in the database.
+Bot Configuration: After login, users navigate to the dashboard, upload stock lists, and configure bot settings.
+Dashboard Monitoring: Users view the bot's real-time activities and trading status on the dashboard.
+Notifications: (Future scope) Users receive alerts for trade actions on chosen messaging platforms.

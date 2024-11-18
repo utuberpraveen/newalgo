@@ -1,0 +1,73 @@
+<!-- app/templates/view_stock_data.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stock Data</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+<body>
+    <h1>Your Stock Data</h1>
+
+    <!-- Table to display stock data -->
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Stock Symbol</th>
+                <th>Buy Price</th>
+                <th>ATH</th>
+                <th>How Far</th>
+                <th>Stop Loss</th>
+                <th>Highest Price</th>
+                <th>Total Shares</th>
+                <th>SL Point</th>
+                <th>10%</th>
+                <th>20%</th>
+                <th>30%</th>
+                <th>Investment</th>
+                <th>SL</th>
+                <th>Ready to Lose</th>
+                <th>Timestamp</th>
+                <th>NS Symbol Token</th>
+                <th>TP1</th>
+                <th>TP2</th>
+                <th>TP3</th>
+                <th>Trailing SL</th>
+                <th>52 Week High</th>
+                <th>Which Strategy</th>
+                <th>Trade Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stock in stocks %}
+            <tr>
+                <td>{{ stock.stock_symbol }}</td>
+                <td>{{ stock.buy_price }}</td>
+                <td>{{ stock.ath }}</td>
+                <td>{{ stock.how_far * 100 }}%</td>  <!-- Convert back to percentage -->
+                <td>{{ stock.stop_loss }}</td>
+                <td>{{ stock.highest_price }}</td>
+                <td>{{ stock.total_shares }}</td>
+                <td>{{ stock.sl_point }}</td>
+                <td>{{ stock.ten_percent }}</td>
+                <td>{{ stock.twenty_percent }}</td>
+                <td>{{ stock.thirty_percent }}</td>
+                <td>{{ stock.investment }}</td>
+                <td>{{ stock.sl }}</td>
+                <td>{{ stock.ready_to_lose }}</td>
+                <td>{{ stock.timestamp }}</td>
+                <td>{{ stock.nsesymboltoken }}</td>
+                <td>{{ stock.tp1 }}</td>
+                <td>{{ stock.tp2 }}</td>
+                <td>{{ stock.tp3 }}</td>
+                <td>{{ stock.trailing_sl }}</td>
+                <td>{{ stock.fifty_two_w_high }}</td>
+                <td>{{ stock.which_strategy }}</td>
+                <td>{{ stock.trade_status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>

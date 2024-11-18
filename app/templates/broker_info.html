@@ -1,0 +1,19 @@
+<!-- templates/broker_info.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Select Broker</title>
+</head>
+<body>
+    <h1>Select Broker</h1>
+    <form action="{{ url_for('auth.collect_broker_info') }}" method="get">
+        <label for="broker">Select Broker:</label>
+        <select name="broker" id="broker">
+            <option value="motilal">Motilal Oswal</option>
+            <!-- Add more brokers here if necessary -->
+        </select>
+        <button type="submit">Next</button>
+    </form>
+</body>
+</html>

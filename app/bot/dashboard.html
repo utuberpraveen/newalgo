@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Dashboard</h1>
+    <form action="{{ url_for('dashboard.upload_file') }}" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".xlsx">
+        <button type="submit">Upload Excel</button>
+    </form>
+    <h2>Your Stock Data</h2>
+    <ul>
+    {% for stock in stocks %}
+        <li>{{ stock.stock_symbol }} - Buy: {{ stock.buy_price }} - Sell: {{ stock.sell_price }}</li>
+    {% endfor %}
+    </ul>
+</body>
+</html>

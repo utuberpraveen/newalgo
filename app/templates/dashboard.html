@@ -1,0 +1,49 @@
+<!-- app/templates/dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<script>
+    var uploadStockDataUrl = "{{ url_for('auth.upload_stock_data') }}";
+    var viewStockDataUrl = "{{ url_for('auth.view_stock_data') }}";
+</script>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+<body>
+    <!-- Top section -->
+    <div class="top-bar">
+        <button onclick="logout()">Logout</button>
+        <div class="user-info">
+            <span>{{ current_user.name }}</span>
+            <span>{{ current_user.email }}</span>
+            <span>Broker ID: {{ broker_user_id }}</span>
+            <span>Balance: {{ balance }}</span>
+        </div>
+    </div>
+
+    <!-- Main layout -->
+    <div class="layout">
+        <!-- Left sidebar -->
+        <nav class="sidebar">
+            <ul>
+                <li onclick="loadSection('dashboard')">Dashboard</li>
+                <li onclick="loadSection('excel_upload')">Upload Stock Data</li>
+                <li onclick="loadSection('view_stock_data')">View Stock Data</li>
+                <li onclick="loadSection('bot_control')">Bot Control</li>
+                <li onclick="loadSection('trade_history')">Trade History</li>
+            </ul>
+        </nav>
+
+        <!-- Center content area -->
+        <div class="content" id="content-area">
+            <h2>Welcome to the Dashboard</h2>
+            <p>Select an option from the sidebar to get started.</p>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>

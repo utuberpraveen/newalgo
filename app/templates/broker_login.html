@@ -1,0 +1,17 @@
+<!-- templates/broker_login.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Broker Login</title>
+</head>
+<body>
+    <h1>Enter TOTP for Broker Login</h1>
+    <p>Your Broker User ID: {{ broker_user_id }}</p>  <!-- Display broker_user_id here -->
+    <form action="{{ url_for('auth.broker_login') }}" method="post">
+        <label for="totp">TOTP:</label>
+        <input type="text" id="totp" name="totp" required><br>
+        <button type="submit">Login</button>
+    </form>
+</body>
+</html>
