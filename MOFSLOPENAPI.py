@@ -8,9 +8,8 @@ import socket
 import re, uuid
 import hashlib
 import platform
-import wmi
+import subprocess
 import geocoder
-
 import websocket
 import requests
 import json
@@ -48,6 +47,31 @@ except:
     print('\nError in Assigning Path!!!')
     sys.exit()
 
+
+# Function to get the device model
+def get_device_model():
+    try:
+        if platform.system() == "Linux":
+            # Get device model from Linux DMI table
+            model = subprocess.check_output("cat /sys/devices/virtual/dmi/id/product_name", shell=True).decode().strip()
+        else:
+            model = "Unsupported OS"
+        return model
+    except Exception as e:
+        print(f"Error fetching device model: {str(e)}")
+        return "Unknown Model"
+# Function to get the manufacturer
+def get_manufacturer():
+    try:
+        if platform.system() == "Linux":
+            # Get manufacturer from Linux DMI table
+            manufacturer = subprocess.check_output("cat /sys/devices/virtual/dmi/id/sys_vendor", shell=True).decode().strip()
+        else:
+            manufacturer = "Unsupported OS"
+        return manufacturer
+    except Exception as e:
+        print(f"Error fetching manufacturer: {str(e)}")
+        return "Unknown Manufacturer"
 
 def WriteIntoLog(f_status, f_filename, f_message):
     try:
@@ -168,8 +192,8 @@ def GetPublicIPAddress():
 
 # System Info
 
-c = wmi.WMI()   
-objsystem = c.Win32_ComputerSystem()[0]
+#c = wmi.WMI()   
+#objsystem = c.Win32_ComputerSystem()[0]
 system = platform.uname()
 
 def GetOsName():
@@ -179,16 +203,27 @@ def GetOsName():
     except Exception as e:
         print(e)
         WriteIntoLog("FAILED", "MOFSLOPENAPI.py", ("GetOsName" + str(e)))
-        # return "Win32NT"
+        # return "Windows 10"
 
 def GetOsVersion():
-    try:        
-        osversion = system.version
-        return osversion
+    try:
+        osname = platform.system()
+        
+        if osname == "Windows":
+            osversion = platform.version()
+        elif osname == "Linux":
+            osversion = platform.release()
+        else:
+            osversion = platform.version()
+        
+        # Try to format the version as a float
+        osversion_numbers = ''.join(c for c in osversion if c.isdigit() or c == '.')
+        return float(osversion_numbers)
+    
     except Exception as e:
         print(e)
         WriteIntoLog("FAILED", "MOFSLOPENAPI.py", ("GetOsVersion" + str(e)))
-        # return "10.0.19044.0"
+        return "10.0.19044"
 
 def GetInstalledAppid():
     try:        
@@ -201,7 +236,8 @@ def GetInstalledAppid():
 
 def GetDeviceModel():
     try:   
-        devicemodel = objsystem.Model     
+        #devicemodel = objsystem.Model  
+        devicemodel = get_device_model()   
         return devicemodel
     except Exception as e:
         print(e)
@@ -210,7 +246,8 @@ def GetDeviceModel():
 
 def GetManufacturer():
     try:   
-        manufacturer = objsystem.Manufacturer
+        #manufacturer = objsystem.Manufacturer
+        manufacturer = get_manufacturer()
         WriteIntoLog("SUCCESS", "MOFSLOPENAPI.py", ("GetManufacturer" +manufacturer) )
 
         if manufacturer==None:
@@ -507,10 +544,9 @@ class MOFSLOPENAPI(object):
                 m_headers["browsername"] = self.m_browsername
                 m_headers["browserversion"] = self.m_browserversion
 
-            print(m_headers)           
-            print(f_URL)  
+            # print(m_headers)            
             response = requests.post(f_URL, headers= m_headers, data = json.dumps(f_Data))
-            print("JSON Response ", response.content)
+            # print("JSON Response ", response.content)
             j_ResponseMessage = response.content.decode('utf-8')
 
             WriteIntoLog("SUCCESS", "MOFSLOPENAPI.py", "Post WebRequest Send Successfully")
