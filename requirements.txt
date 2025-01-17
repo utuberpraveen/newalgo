@@ -95,3 +95,5 @@ yfinance==0.2.25
 zipp==3.21.0
 zope.event==5.0
 zope.interface==7.1.1
+gunicorn
+pyotp
