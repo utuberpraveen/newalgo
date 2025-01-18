@@ -28,8 +28,8 @@ def create_app():
     app.register_blueprint(dashboard_bp)     # Dashboard routes
 
     # Google OAuth Blueprint
-    print("*****os.getenv("GOOGLE_CLIENT_ID")", os.getenv("GOOGLE_CLIENT_ID"))
-    print("*****os.getenv("GOOGLE_CLIENT_SECRET")", os.getenv("GOOGLE_CLIENT_SECRET"))
+    print("*****os.getenv(GOOGLE_CLIENT_ID)", os.getenv("GOOGLE_CLIENT_ID"))
+    print("*****os.getenv(GOOGLE_CLIENT_SECRET)", os.getenv("GOOGLE_CLIENT_SECRET"))
     google_bp = make_google_blueprint(
         client_id=os.getenv("GOOGLE_CLIENT_ID"),
         client_secret=os.getenv("GOOGLE_CLIENT_SECRET"),
